@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd">
-
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>com.blest14</groupId>
     <artifactId>devops-java-web-app</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
-
     <name>HelloWorld Maven Webapp</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Java version -->
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-
+        <!-- Versions -->
         <junit.version>4.13.2</junit.version>
+        <jaxb.api.version>2.3.1</jaxb.api.version>
+        <jaxb.runtime.version>2.3.8</jaxb.runtime.version>
     </properties>
-
     <dependencies>
-
         <!-- Servlet API -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -31,39 +27,39 @@
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
-
-        <!-- JAXB API - required because modern Java versions
-             no longer include JAXB by default -->
+        <!-- JAXB API
+             Required because Java 11+ no longer contains JAXB -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.3.1</version>
+            <version>${jaxb.api.version}</version>
         </dependency>
-
-        <!-- JAXB Runtime -->
+        <!-- JAXB Runtime implementation (Glassfish/Eclipse) —
+             this already includes its own jaxb-core, so do NOT
+             also pull in com.sun.xml.bind:jaxb-core (version conflict) -->
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.8</version>
+            <version>${jaxb.runtime.version}</version>
         </dependency>
-
-        <!-- JUnit -->
+        <!-- JAXB Activation -->
+        <dependency>
+            <groupId>com.sun.activation</groupId>
+            <artifactId>javax.activation</artifactId>
+            <version>1.2.0</version>
+        </dependency>
+        <!-- JUnit 4 -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
-
     <build>
-
         <finalName>HelloWorld</finalName>
-
         <plugins>
-
-            <!-- Compiler -->
+            <!-- Maven Compiler -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -71,10 +67,16 @@
                 <configuration>
                     <source>8</source>
                     <target>8</target>
+                    <encoding>UTF-8</encoding>
                 </configuration>
             </plugin>
-
-            <!-- WAR -->
+            <!-- Maven Resources -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+            </plugin>
+            <!-- WAR Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -83,16 +85,6 @@
                     <failOnMissingWebXml>false</failOnMissingWebXml>
                 </configuration>
             </plugin>
-
             <!-- Surefire -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
-            </plugin>
-
-        </plugins>
-
-    </build>
-
-</project>
+                <groupId>org.apache.maven.plugins</group
